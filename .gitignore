@@ -1,0 +1,38 @@
+# Build artifacts
+target/
+build/
+*.o
+*.so
+*.a
+*.dylib
+*.dll
+*.exe
+
+# IDE-specific files
+.vscode/
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.suo
+*.ncb
+*.user
+*.aps
+*.idb
+*.opendb
+*.pdb
+
+# Direnv
+.direnv/
+
+# Other temporary files
+*~
+*.swp
+*.bak
+
+# Nix specific
+result
+result-dev
+# Python
+__pycache__/
+*.pyc

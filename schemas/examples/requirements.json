@@ -1,0 +1,18 @@
+{
+  "$schema": "urn:requirements-framework:v1:requirements",
+  "schemaVersion": "1.0",
+  "title": "Heater controller",
+  "requirements": [
+    {
+      "id": "HEAT-001",
+      "statement": "The controller shall enable heating only when demand is active and the interlock is closed.",
+      "status": "draft",
+      "title": "Heating interlock",
+      "tags": [
+        "controls",
+        "safety"
+      ],
+      "parents": []
+    }
+  ]
+}

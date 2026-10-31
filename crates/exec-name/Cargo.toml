@@ -1,0 +1,8 @@
+[dependencies]
+lib-name = {version = "0.1.0", path = "../lib-name"}
+
+[package]
+name = "exec-name"
+version = "0.1.0"
+edition = "2024"
+license = "Unlicense"

@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:example:project-requirements:v1",
+  "$ref": "urn:requirements-framework:v1:core",
+  "properties": {
+    "requirements": {
+      "items": {
+        "$ref": "urn:requirements-framework:v1:core#/$defs/requirement",
+        "properties": {
+          "owner": {
+            "type": "string",
+            "pattern": "\\S"
+          },
+          "criticality": {
+            "enum": [
+              "low",
+              "high"
+            ]
+          },
+          "id": {
+            "$ref": "#/$defs/identifier"
+          },
+          "parents": {
+            "items": {
+              "$ref": "#/$defs/identifier"
+            }
+          },
+          "status": {
+            "enum": [
+              "proposed",
+              "accepted",
+              "superseded"
+            ]
+          }
+        },
+        "required": [
+          "owner",
+          "criticality"
+        ],
+        "unevaluatedProperties": false
+      }
+    }
+  },
+  "unevaluatedProperties": false,
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[0-9]{3}/[A-Z]+$"
+    }
+  }
+}
