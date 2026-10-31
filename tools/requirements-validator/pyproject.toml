@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "requirements-validator"
+version = "0.1.0"
+description = "Validate requirement documents with offline JSON schemas"
+requires-python = ">=3.10"
+dependencies = ["jsonschema>=4.18", "referencing>=0.30"]
+
+[project.scripts]
+requirements-validate = "requirements_validator.validate:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

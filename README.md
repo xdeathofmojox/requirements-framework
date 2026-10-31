@@ -7,7 +7,7 @@ analysis. The Axum-based requirements viewer is built from the Cargo workspace u
 
 ## Write and validate requirements
 
-See the [validator quick start](tools/schema-validation/README.md) for copyable commands.
+See the [validator quick start](tools/requirements-validator/README.md) for copyable commands.
 
 See [the core example](schemas/examples/requirements.json). Each document has
 `schemaVersion: "1.0"` and a nonempty `requirements` array. Each requirement needs
@@ -22,7 +22,7 @@ nix develop
 requirements-validate schemas/examples/requirements.json
 requirements-validate --schema-version v1 schemas/examples/requirements.json
 requirements-validate --schema schemas/examples/project.schema.json schemas/examples/project-requirements.json
-python -m unittest discover -s tools/schema-validation/tests -v
+python -m unittest discover -s tools/requirements-validator/src/requirements_validator/tests -v
 nix flake check
 ```
 
@@ -63,7 +63,7 @@ Those semantic checks and evidence models belong to subsequent tooling. Breaking
 schema changes will use a new schema version and IDs.
 
 Package definitions live beside their sources: `schemas/default.nix` and
-`tools/schema-validation/default.nix`. The overlay composes them with `callPackage`.
+`tools/requirements-validator/default.nix`. The overlay composes them with `callPackage`.
 
 ## Schema and release versions
 

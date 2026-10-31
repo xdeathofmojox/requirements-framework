@@ -8,15 +8,18 @@ import subprocess
 import tempfile
 from pathlib import Path
 
-PACKAGE = Path(__file__).resolve().parents[1]
+SOURCE = Path(__file__).resolve().parents[2]
 if "REQUIREMENTS_SCHEMA_DATA" not in os.environ:
     raise RuntimeError("Run tests in nix develop or through nix flake check")
 SCHEMA_DATA = Path(os.environ["REQUIREMENTS_SCHEMA_DATA"])
 SCHEMAS = SCHEMA_DATA / "schemas"
 EXAMPLES = SCHEMA_DATA / "examples"
-sys.path.insert(0, str(PACKAGE))
+sys.path.insert(0, str(SOURCE))
+os.environ["PYTHONPATH"] = os.pathsep.join(
+    filter(None, [str(SOURCE), os.environ.get("PYTHONPATH")])
+)
 
-from validate import validator
+from requirements_validator.validate import validator
 
 
 class SchemaTests(unittest.TestCase):
@@ -156,7 +159,8 @@ class VersionSelectionTests(unittest.TestCase):
     def test_cli_version_selection(self):
         command = [
             sys.executable,
-            str(PACKAGE / "validate.py"),
+            "-m",
+            "requirements_validator",
             "--schema-dir",
             str(SCHEMAS),
         ]
@@ -191,7 +195,8 @@ class ValidationOutputTests(unittest.TestCase):
             result = subprocess.run(
                 [
                     sys.executable,
-                    str(PACKAGE / "validate.py"),
+                    "-m",
+                    "requirements_validator",
                     "--schema-dir",
                     str(SCHEMAS),
                     str(invalid),

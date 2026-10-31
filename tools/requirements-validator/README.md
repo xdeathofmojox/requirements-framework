@@ -64,7 +64,7 @@ For downstream Nix setup and schema extension guidance, see the
 To run the tests from the framework repository root:
 
 ```sh
-nix develop --command python -m unittest discover -s tools/schema-validation/tests -v
+nix develop --command python -m unittest discover -s tools/requirements-validator/src/requirements_validator/tests -v
 ```
 
 The development shell supplies `REQUIREMENTS_SCHEMA_DATA`, pointing to the schemas
@@ -82,3 +82,18 @@ requirements-validate --schema schemas/examples/project.schema.json --describe
 This returns declared requirement fields and whether additional properties are
 allowed. It resolves local references and `allOf` composition; conditional fields
 are listed as optional controls, with their applicability checked on save.
+
+## Python package
+
+Python sources live in `src/requirements_validator`. `pyproject.toml` declares the
+runtime dependencies and the `requirements-validate` console entry point. Nix
+builds this package and supplies the bundled schema directory automatically.
+
+For a Python-only installation, run `pip install ./tools/requirements-validator` in a
+virtual environment. Supply schemas explicitly when using that installation:
+
+```sh
+requirements-validate --schema-dir schemas schemas/examples/requirements.json
+```
+
+You can also run the module with `python -m requirements_validator` after installing.

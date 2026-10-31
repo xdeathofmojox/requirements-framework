@@ -85,7 +85,7 @@ def main():
         parser.error("provide at least one document, or use --describe")
     try:
         if args.describe:
-            from describe import describe_requirements
+            from .describe import describe_requirements
 
             selected, registry = schema_context(
                 args.schema_dir, args.schema, args.schema_version

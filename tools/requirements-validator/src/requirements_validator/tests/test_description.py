@@ -6,10 +6,13 @@ import sys
 import tempfile
 import unittest
 
-PACKAGE = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(PACKAGE))
-from describe import describe_requirements
-from validate import schema_context
+SOURCE = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(SOURCE))
+os.environ["PYTHONPATH"] = os.pathsep.join(
+    filter(None, [str(SOURCE), os.environ.get("PYTHONPATH")])
+)
+from requirements_validator.describe import describe_requirements
+from requirements_validator.validate import schema_context
 
 DATA = Path(os.environ["REQUIREMENTS_SCHEMA_DATA"])
 
@@ -90,7 +93,8 @@ class DescriptionTests(unittest.TestCase):
         result = subprocess.run(
             [
                 sys.executable,
-                str(PACKAGE / "validate.py"),
+                "-m",
+                "requirements_validator",
                 "--schema-dir",
                 str(DATA / "schemas"),
                 "--describe",

@@ -9,7 +9,7 @@ runCommand "requirements-schema-tests"
     REQUIREMENTS_SCHEMA_DATA = "${requirements-schemas}/share/requirements-framework";
   }
   ''
-    cd ${../.}
-    PYTHONDONTWRITEBYTECODE=1 python -m unittest discover -s tests -v
+    cd ${../../..}
+    PYTHONDONTWRITEBYTECODE=1 python -m unittest discover -s src/requirements_validator/tests -v
     touch $out
   ''
