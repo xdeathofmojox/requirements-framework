@@ -1,0 +1,20 @@
+[package]
+name = "requirements-viewer"
+version.workspace = true
+edition = "2024"
+license.workspace = true
+
+[dependencies]
+axum.workspace = true
+clap.workspace = true
+parking_lot.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tempfile.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+uuid.workspace = true
+webbrowser.workspace = true
+
+[dev-dependencies]
+tower.workspace = true

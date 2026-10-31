@@ -6,7 +6,6 @@
         requirements-schemas
         requirements-validator
         requirements-viewer
-        requirements-viewer-rust
         ;
       default = pkgs.requirements-validator;
     };

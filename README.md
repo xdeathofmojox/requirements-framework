@@ -2,8 +2,8 @@
 
 JSON requirements, composable JSON Schema Draft 2020-12 schemas, and Nix tooling.
 The schema layer is the first step toward requirements traceability and MC/DC
-analysis. Schema and Python tools do not require Rust; an optional Axum viewer
-provides a Rust implementation. The original template crates remain dormant.
+analysis. The Axum-based requirements viewer is built from the Cargo workspace under
+`applications/requirements-viewer`. Schema and validation packages can be used independently.
 
 ## Write and validate requirements
 
@@ -86,7 +86,7 @@ selection with a synthetic future contract. No v2 contract is shipped yet.
 
 Add this repository as a flake input (named `requirements-framework` below).
 Packages are `requirements-validator`, `requirements-schemas`,
-`requirements-viewer`, and `requirements-viewer-rust`. The default package is the
+and `requirements-viewer`. The default package is the
 validator. Schemas install under
 `share/requirements-framework/schemas/v1`.
 Examples install under `share/requirements-framework/examples`. Validator tests
@@ -94,8 +94,13 @@ consume these packaged files through `REQUIREMENTS_SCHEMA_DATA`, which Nix sets
 in the development shell and test check.
 
 Use `inputs.requirements-framework.overlays.default` in a nixpkgs import to expose
-`pkgs.requirements-validator` and `pkgs.requirements-schemas`. The overlay also
+`pkgs.requirements-validator`, `pkgs.requirements-schemas`, and
+`pkgs.requirements-viewer`. The overlay also
 works directly via `import ./overlay.nix` and uses the consumer's nixpkgs.
+Without an overlay, add
+`inputs.requirements-framework.packages.${system}.requirements-viewer` to a
+downstream development shell alongside the schema package. The viewer includes
+its validator and bundled schemas through the Nix wrapper.
 
 `nix/modules` is discovered by `import-tree`. The requirements module there
 configures this repository and exports `flakeModules.default` for downstream
@@ -126,25 +131,23 @@ flake, since Nix excludes untracked files. No overlay is required for the module
 nix run .#requirements-viewer -- schemas/examples/traceability.json
 ```
 
-The [requirements viewer](tools/requirements-viewer/README.md) opens a local browser
+The [requirements viewer](applications/requirements-viewer/README.md) opens a local browser
 view with parent layers, trace links, search, and an inspector for custom fields.
 It validates files before serving them and reports unresolved trace links.
 
-An additional [Rust/Axum viewer](tools/requirements-viewer-rust/README.md) supports
-validated additions to files on your branch:
+Enable editing to make validated changes to files on your branch:
 
 ```sh
-nix run .#requirements-viewer-rust -- --edit schemas/examples/traceability.json
+nix run .#requirements-viewer -- --edit schemas/examples/traceability.json
 ```
 
 Use **Add requirement** to append a record; review the resulting JSON changes with
-Git before committing. Omit `--edit` for a read-only session. The Python viewer
-continues to be available independently.
+Git before committing. Omit `--edit` for a read-only session.
 
-The Rust viewer also accepts folders recursively and has a **Reload files** button
+The viewer also accepts folders recursively and has a **Reload files** button
 for external edits and newly added documents. Browser refreshes reuse the loaded
 snapshot.
 
 ```sh
-nix run .#requirements-viewer-rust -- --edit requirements/
+nix run .#requirements-viewer -- --edit requirements/
 ```

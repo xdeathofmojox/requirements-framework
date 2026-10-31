@@ -1,5 +1,5 @@
 use clap::Parser;
-use requirements_viewer_rust::{Store, Validation, router};
+use requirements_viewer::{Store, Validation, router};
 use std::path::PathBuf;
 
 #[derive(Parser)]
@@ -41,7 +41,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let authority = listener.local_addr()?.to_string();
     let url = format!("http://{authority}/");
     println!(
-        "Requirements viewer (Rust): {url}\n{}\nPress Ctrl+C to stop.",
+        "Requirements viewer: {url}\n{}\nPress Ctrl+C to stop.",
         if args.edit {
             "Additions enabled for opened files."
         } else {

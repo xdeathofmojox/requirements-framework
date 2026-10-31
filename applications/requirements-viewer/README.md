@@ -1,19 +1,18 @@
-# Rust requirements viewer
+# Requirements viewer
 
-An additional Axum-based viewer with the same layered graph and inspector as the
-Python viewer. Its browser assets are embedded in the executable. The Python
-viewer remains available as `requirements-viewer` / `requirements-view`.
+An Axum-based requirements viewer with a layered graph and inspector. Browser
+assets are embedded in the executable.
 
 From the framework repository root, open a read-only view:
 
 ```sh
-nix run .#requirements-viewer-rust -- schemas/examples/traceability.json
+nix run .#requirements-viewer -- schemas/examples/traceability.json
 ```
 
 To add requirements to your branch's JSON files, enable additions explicitly:
 
 ```sh
-nix run .#requirements-viewer-rust -- --edit requirements/
+nix run .#requirements-viewer -- --edit requirements/
 ```
 
 You can mix individual files and folders. Folders are scanned recursively for
@@ -85,7 +84,7 @@ git commit -m "Add system requirements"
 Use a project schema when it defines different fields or ID rules:
 
 ```sh
-nix run .#requirements-viewer-rust -- --edit \
+nix run .#requirements-viewer -- --edit \
   --schema schemas/examples/project.schema.json \
   schemas/examples/project-requirements.json
 ```
@@ -129,19 +128,18 @@ The server binds only to loopback. Save requests require the local origin and a
 session token. To choose a port without launching a browser:
 
 ```sh
-nix run .#requirements-viewer-rust -- --no-browser --port 8765 \
+nix run .#requirements-viewer -- --no-browser --port 8765 \
   schemas/examples/traceability.json
 ```
 
-The overlay provides `pkgs.requirements-viewer-rust`. Nix supplies the existing
-schema validator and schemas; Cargo dependencies are pinned in this crate's own
-manifest and lockfile. It builds independently of the template workspace.
+The overlay provides `pkgs.requirements-viewer`. Nix supplies the existing
+schema validator and schemas; Cargo dependencies are pinned in the application
+manifest and the repository's workspace lockfile.
 
 Run the Rust tests from the framework repository root:
 
 ```sh
-nix develop --command cargo test --locked \
-  --manifest-path tools/requirements-viewer-rust/Cargo.toml
+nix develop --command cargo test --workspace --locked
 ```
 
 `nix flake check` also builds the Rust package and runs these tests. Browser

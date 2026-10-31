@@ -2,7 +2,7 @@ use axum::{
     body::{Body, to_bytes},
     http::{Request, StatusCode},
 };
-use requirements_viewer_rust::{Document, Store, Validation, router};
+use requirements_viewer::{Document, Store, Validation, router};
 use serde_json::{Value, json};
 use std::path::Path;
 use tower::ServiceExt;
