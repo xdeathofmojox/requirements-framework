@@ -10,7 +10,7 @@ from referencing import Registry, Resource
 from referencing.exceptions import Unresolvable
 
 
-def validator(schema_directory, project_schema=None, schema_version=None):
+def schema_context(schema_directory, project_schema=None, schema_version=None):
     if project_schema is not None and schema_version is not None:
         raise ValueError("select either a project schema or a schema version")
     paths = sorted(Path(schema_directory).rglob("*.schema.json"))
@@ -36,6 +36,13 @@ def validator(schema_directory, project_schema=None, schema_version=None):
         if uri not in schemas:
             raise ValueError(f"unsupported schema version: {version}")
         selected = schemas[uri]
+    return selected, registry
+
+
+def validator(schema_directory, project_schema=None, schema_version=None):
+    selected, registry = schema_context(
+        schema_directory, project_schema, schema_version
+    )
     return Draft202012Validator(selected, registry=registry)
 
 
@@ -67,9 +74,24 @@ def main():
     selection.add_argument(
         "--schema-version", help="Bundled schema version, e.g. v1 (default: v1)"
     )
-    parser.add_argument("documents", type=Path, nargs="+")
+    parser.add_argument(
+        "--describe",
+        action="store_true",
+        help="Print requirement form metadata as JSON",
+    )
+    parser.add_argument("documents", type=Path, nargs="*")
     args = parser.parse_args()
+    if not args.describe and not args.documents:
+        parser.error("provide at least one document, or use --describe")
     try:
+        if args.describe:
+            from describe import describe_requirements
+
+            selected, registry = schema_context(
+                args.schema_dir, args.schema, args.schema_version
+            )
+            print(json.dumps(describe_requirements(selected, registry)))
+            return 0
         check = validator(args.schema_dir, args.schema, args.schema_version)
         failed = False
         for path in args.documents:

@@ -9,7 +9,7 @@ in
 writeShellApplication {
   name = "requirements-validate";
   text = ''
-    exec ${python}/bin/python ${./validate.py} \
+    exec ${python}/bin/python ${./.}/validate.py \
       --schema-dir ${requirements-schemas}/share/requirements-framework/schemas "$@"
   '';
 }

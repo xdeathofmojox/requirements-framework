@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "1.0",
+  "title": "Thermal control \u00b7 requirements baseline",
+  "requirements": [
+    {
+      "id": "SYS-001",
+      "title": "Safe thermal control",
+      "statement": "The system shall maintain a safe operating temperature.",
+      "status": "approved",
+      "tags": [
+        "system",
+        "safety"
+      ]
+    },
+    {
+      "id": "CTRL-001",
+      "title": "Heating interlock",
+      "statement": "The controller shall enable heating only when demand is active and the interlock is closed.",
+      "parents": [
+        "SYS-001"
+      ],
+      "tags": [
+        "controls"
+      ]
+    },
+    {
+      "id": "CTRL-002",
+      "title": "Overtemperature response",
+      "statement": "The controller shall disable heating when temperature exceeds the configured limit.",
+      "parents": [
+        "SYS-001"
+      ],
+      "tags": [
+        "safety"
+      ]
+    },
+    {
+      "id": "SW-001",
+      "title": "Evaluate heating decision",
+      "statement": "The software shall evaluate demand and interlock inputs before enabling the heater.",
+      "parents": [
+        "CTRL-001"
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "SW-002",
+      "title": "Latch safety shutdown",
+      "statement": "The software shall latch heating off after an overtemperature event.",
+      "parents": [
+        "CTRL-001",
+        "CTRL-002"
+      ],
+      "status": "draft"
+    }
+  ]
+}

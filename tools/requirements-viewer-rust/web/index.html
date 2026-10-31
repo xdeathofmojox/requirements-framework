@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="/theme.js"></script>
+  <title>Requirements atlas</title><link rel="stylesheet" href="/style.css">
+  <script src="/view.js" defer></script>
+  <script src="/schema-form.js" defer></script>
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header><div><span class="eyebrow">REQUIREMENTS FRAMEWORK / TRACEABILITY</span><h1>Requirements atlas<span class="dot">.</span></h1><p>Follow the intent. Inspect the detail.</p></div><div class="header-actions"><div class="session"><span class="live"></span> RUST / AXUM <span class="readonly" id="mode">READ ONLY</span></div><button id="theme-toggle" type="button" aria-label="Light mode. Switch to dark mode" title="Light mode. Switch to dark mode" aria-pressed="false"><svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg><svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 14A8.5 8.5 0 0 1 10 3.5 8.5 8.5 0 1 0 20.5 14Z"/></svg></button></div></header>
+  <dialog id="editor">
+    <form id="requirement-form">
+      <h2 id="editor-title">Add requirement</h2><p id="editor-help">Append to a JSON file or start a new document. The complete document must pass its schema.</p>
+      <label>Target file<select id="target" required></select></label>
+      <div id="new-document" hidden>
+        <label>Root folder<select id="new-folder"></select></label>
+        <label>Relative file path<input id="new-filename" placeholder="system/controls/requirements.json" aria-describedby="new-path-help"></label>
+        <p id="new-path-help">Missing folders are created inside this root. Parent paths (..) and symlinks are not allowed.</p>
+        <label>Document fields (JSON object)<textarea id="document-fields" rows="3" spellcheck="false">{"schemaVersion":"1.0"}</textarea></label>
+      </div>
+      <label>Requirement ID<input id="new-id" required></label>
+      <label>Title<input id="new-title" required></label>
+      <label>Statement<textarea id="new-statement" rows="3" required></textarea></label>
+      <label>Parent IDs (one per line)<textarea id="new-parents" rows="2"></textarea></label>
+      <div id="schema-fields"></div>
+      <label id="extra-fields-label">Additional fields (JSON object)<textarea id="new-extra" rows="5" spellcheck="false">{}</textarea></label>
+      <p id="save-error" role="alert"></p>
+      <div class="form-actions"><button id="cancel" type="button">Cancel</button><button id="save" type="submit">Validate and save</button></div>
+    </form>
+  </dialog>
+  <dialog id="delete-dialog" aria-labelledby="delete-title">
+    <form id="delete-form">
+      <h2 id="delete-title">Delete requirement?</h2>
+      <p>Are you sure you want to remove this requirement from its JSON file?</p>
+      <p id="delete-description"></p>
+      <p id="delete-consequence">Other loaded requirements must not reference it as a parent.</p>
+      <p id="delete-error" role="alert"></p>
+      <div class="form-actions"><button id="delete-cancel" type="button" autofocus>Cancel</button><button id="delete-confirm" class="danger" type="submit">Yes, delete requirement</button></div>
+    </form>
+  </dialog>
+  <main>
+    <section class="toolbar" aria-label="Graph controls">
+      <div class="status-row"><div id="stats" aria-live="polite">Loading requirements…</div><p id="reload-status" role="status" aria-live="polite"></p></div>
+      <fieldset class="control-group search-group">
+        <legend>Find and select</legend>
+        <label class="search">Find a requirement<input id="search" type="search" placeholder="Search IDs, titles, or custom data"></label>
+        <button id="clear" type="button">Clear selection</button>
+      </fieldset>
+      <fieldset class="control-group">
+        <legend>Display</legend>
+        <label>View<select id="scope"><option value="all">All requirements</option><option value="trace">Selected trace</option><option value="root">Selected as root</option><option value="parents">One layer up</option></select></label>
+        <label>Layout<select id="layout"><option value="horizontal">Left to right</option><option value="vertical">Top to bottom</option></select></label>
+      </fieldset>
+      <fieldset class="control-group">
+        <legend>Files</legend>
+        <button id="reload" type="button">Reload files</button>
+        <button id="add" type="button" hidden>Add requirement</button>
+      </fieldset>
+    </section>
+    <details id="diagnostics" hidden><summary id="issue-count"></summary><ul id="issues"></ul></details>
+    <div class="workspace"><section class="map" aria-label="Requirement layers"><div class="map-heading"><h2>Trace map</h2><span>Parent → child · layers inferred from parent links</span></div><div id="scroll"><div id="canvas"><svg id="edges" aria-hidden="true"></svg><div id="layers"></div></div></div><p id="empty" hidden>No requirements match this view.</p></section>
+    <aside id="inspector" aria-label="Requirement details"><span class="eyebrow">INSPECTOR</span><div id="detail"><h2>Every requirement has a story.</h2><p>Select a card to see its statement, trace links, and project-specific fields.</p><div class="legend"><span>01</span> Start with a root requirement<br><span>02</span> Follow its derived requirements<br><span>03</span> Inspect the full record</div></div></aside></div>
+    <footer>Layers express parent depth, not a declared engineering hierarchy. <span>Saved additions refresh this view. Use Reload files after external changes.</span></footer>
+  </main>
+</body></html>

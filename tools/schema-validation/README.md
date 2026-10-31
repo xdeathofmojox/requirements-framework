@@ -71,3 +71,14 @@ The development shell supplies `REQUIREMENTS_SCHEMA_DATA`, pointing to the schem
 and examples installed by the Nix schema package. Tests use that package rather
 than sibling directories in the checkout. `nix flake check` runs the same tests
 with only the validator sources and its packaged dependencies available.
+
+The viewer can ask the validator for form metadata (without a document):
+
+```sh
+requirements-validate --describe
+requirements-validate --schema schemas/examples/project.schema.json --describe
+```
+
+This returns declared requirement fields and whether additional properties are
+allowed. It resolves local references and `allOf` composition; conditional fields
+are listed as optional controls, with their applicability checked on save.

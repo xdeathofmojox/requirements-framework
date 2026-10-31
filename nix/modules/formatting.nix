@@ -11,6 +11,7 @@
           clang-format.enable = true;
           mdformat.enable = true;
           nixfmt.enable = true;
+          rustfmt.enable = true;
           ruff-format.enable = true;
           jsonfmt.enable = true;
           shellcheck.enable = true;

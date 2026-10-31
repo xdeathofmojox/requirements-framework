@@ -2,7 +2,8 @@
 
 JSON requirements, composable JSON Schema Draft 2020-12 schemas, and Nix tooling.
 The schema layer is the first step toward requirements traceability and MC/DC
-analysis. No Rust build is needed; the original template crates remain dormant.
+analysis. Schema and Python tools do not require Rust; an optional Axum viewer
+provides a Rust implementation. The original template crates remain dormant.
 
 ## Write and validate requirements
 
@@ -84,8 +85,9 @@ selection with a synthetic future contract. No v2 contract is shipped yet.
 ## Consume with Nix
 
 Add this repository as a flake input (named `requirements-framework` below).
-Packages are `requirements-validator` and `requirements-schemas`; the default
-package is the validator. Schemas install under
+Packages are `requirements-validator`, `requirements-schemas`,
+`requirements-viewer`, and `requirements-viewer-rust`. The default package is the
+validator. Schemas install under
 `share/requirements-framework/schemas/v1`.
 Examples install under `share/requirements-framework/examples`. Validator tests
 consume these packaged files through `REQUIREMENTS_SCHEMA_DATA`, which Nix sets
@@ -117,3 +119,32 @@ For flake-parts projects:
 This adds `checks.<system>.requirements` for `nix flake check`. Without documents,
 no check is added. Commit schema and document files before evaluating a Git-based
 flake, since Nix excludes untracked files. No overlay is required for the module.
+
+## Visualize traceability
+
+```sh
+nix run .#requirements-viewer -- schemas/examples/traceability.json
+```
+
+The [requirements viewer](tools/requirements-viewer/README.md) opens a local browser
+view with parent layers, trace links, search, and an inspector for custom fields.
+It validates files before serving them and reports unresolved trace links.
+
+An additional [Rust/Axum viewer](tools/requirements-viewer-rust/README.md) supports
+validated additions to files on your branch:
+
+```sh
+nix run .#requirements-viewer-rust -- --edit schemas/examples/traceability.json
+```
+
+Use **Add requirement** to append a record; review the resulting JSON changes with
+Git before committing. Omit `--edit` for a read-only session. The Python viewer
+continues to be available independently.
+
+The Rust viewer also accepts folders recursively and has a **Reload files** button
+for external edits and newly added documents. Browser refreshes reuse the loaded
+snapshot.
+
+```sh
+nix run .#requirements-viewer-rust -- --edit requirements/
+```
